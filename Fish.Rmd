@@ -1,0 +1,70 @@
+---
+title: "Fish"
+author: "Marla Seth, ibc346"
+date: "3/9/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library (tidyverse)
+```
+
+```{r}
+fishcat <- read.csv("fishcat_sorted.csv")
+View (fishcat)
+```
+
+```{r}
+fishrate <- read.csv("fishrate.csv")
+View (fishrate)
+```
+
+```{r}
+fish <- fishrate %>%
+  left_join (fishcat, by = 'species')
+
+View (fish)
+```
+
+```{r}
+write.csv(fish,"fish1.csv", row.names = TRUE)
+```
+
+```{r}
+shapiro.test(fish$rating[fish$water=="saltwater"])
+```
+
+```{r}
+set.seed = 33456
+```
+
+
+```{r}
+f1 <- filter(fish, water == "freshwater")
+d2 <- f1[sample(nrow(f1), 5000),]
+
+shapiro.test(d2$rating)
+```
+
+```{r}
+wilcox.test(rating ~ water, data=fish, exact=FALSE)
+```
+
+```{r}
+var.test(rating ~ water, fish, 
+         alternative = "two.sided")
+```
+```{r}
+t.test(rating ~ water, fish, 
+         alternative = "two.sided",var.equal=TRUE)
+```
+
+```{r}
+mean(fish$rating[fish$water == "freshwater"])
+```
+
+```{r}
+mean(fish$rating[fish$water == "saltwater"])
+```
+
